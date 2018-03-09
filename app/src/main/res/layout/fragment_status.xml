@@ -1,0 +1,23 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="inf.obdblue.StatusFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <TextView
+        android:text="status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/statusTextView"
+        android:textColorLink="@color/linkColor"
+        android:textColor="@color/statusTextColor"
+        android:background="@color/statusColor"
+        android:width="350dp"
+        android:height="42dp"
+        android:typeface="monospace"
+        android:textAlignment="gravity"
+        android:textSize="18sp"
+        android:gravity="center" />
+</FrameLayout>

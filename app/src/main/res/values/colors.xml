@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="inputColor">#e1e7f4</color>
+    <color name="bgColor">#4a7042</color>
+    <color name="labelColor">#d5dbd2</color>
+    <color name="linkColor">#e0d97f</color>
+    <color name="statusColor">#5c8c52</color>
+    <color name="statusTextColor">#d6fccf</color>
+</resources>
