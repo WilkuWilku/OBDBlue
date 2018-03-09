@@ -8,7 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.inf.obdapp.MainActivity"
+    tools:context="inf.obdblue.MainActivity"
     android:background="@color/bgColor">
 
     <Button
@@ -32,7 +32,7 @@
     <fragment
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:name="com.example.inf.obdapp.StatusFragment"
+        android:name="inf.obdblue.StatusFragment"
         android:id="@+id/fragment"
         tools:layout="@layout/fragment_status"
         android:layout_alignParentTop="true"
