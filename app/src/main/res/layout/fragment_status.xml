@@ -4,8 +4,6 @@
     android:layout_height="match_parent"
     tools:context="inf.obdblue.StatusFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-
     <TextView
         android:text="status"
         android:layout_width="wrap_content"

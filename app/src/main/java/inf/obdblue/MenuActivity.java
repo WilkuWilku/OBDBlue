@@ -6,6 +6,7 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -30,15 +31,18 @@ public class MenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 
-        //statusFragment = (StatusFragment) getSupportFragmentManager().findFragmentById(R.id.statusFragment);
+
         bBTConnect = (Button) findViewById(R.id.bluetoothButton);
 
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        StatusFragment statusFragment = (StatusFragment) fragmentManager.findFragmentById(R.id.statusFragment);
+        if(statusFragment == null)
+            statusFragment = new StatusFragment();
+        fragmentManager.beginTransaction().replace(R.id.statusFragment, statusFragment).commit();
+        statusFragment.updateStatusText();
         Intent intent = getIntent();
         //String btStatus = intent.getExtras().getString("STATUS");
-        //if(btStatus == null)
-        //    statusFragment.setStatusText("No device connected");
-        //else
-        //    statusFragment.setStatusText(btStatus);
+
 
 
         bBTConnect.setOnClickListener(new View.OnClickListener() {
