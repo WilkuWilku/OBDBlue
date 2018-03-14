@@ -12,6 +12,8 @@ import java.io.OutputStream;
  * Created by Inf on 2018-03-03.
  */
 
+/* Klasa-singleton obsługująca połączenie z urządzeniem poprzez Bluetooth */
+
 public class BluetoothConnection {
 
     private BluetoothAdapter BTAdapter;

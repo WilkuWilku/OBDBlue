@@ -14,6 +14,8 @@ import java.util.ArrayList;
  * Created by Inf on 2018-03-14.
  */
 
+/* Adapter do ParamsListView */
+
 public class ParamsListAdapter extends ArrayAdapter<ParamsListItem> {
 
     private ArrayList<ParamsListItem> data;

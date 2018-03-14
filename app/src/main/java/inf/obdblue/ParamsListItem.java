@@ -4,6 +4,9 @@ package inf.obdblue;
  * Created by Inf on 2018-03-14.
  */
 
+/* Klasa z danymi elementu ParamsListView */
+
+
 public class ParamsListItem {
     private String name;
     private double value;
