@@ -24,6 +24,7 @@ public class MenuActivity extends AppCompatActivity {
     private BluetoothDevice BTDevice = bluetoothConnection.getBTDevice();
     private BluetoothSocket BTSocket = bluetoothConnection.getBTSocket();
     private Button bBTConnect;
+    private Button bDashboard;
     //private StatusFragment statusFragment;
 
     @Override
@@ -33,12 +34,13 @@ public class MenuActivity extends AppCompatActivity {
 
 
         bBTConnect = (Button) findViewById(R.id.bluetoothButton);
+        bDashboard = (Button) findViewById(R.id.dashboardButton);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
-        StatusFragment statusFragment = (StatusFragment) fragmentManager.findFragmentById(R.id.statusFragment);
-        if(statusFragment == null)
-            statusFragment = new StatusFragment();
-        fragmentManager.beginTransaction().replace(R.id.statusFragment, statusFragment).commit();
+        final StatusFragment statusFragment = (StatusFragment) fragmentManager.findFragmentById(R.id.fragment);
+        //if(statusFragment == null)
+        //    statusFragment = new StatusFragment();
+        //fragmentManager.beginTransaction().add(R.id.fragment, statusFragment).commit();
         statusFragment.updateStatusText();
         Intent intent = getIntent();
         //String btStatus = intent.getExtras().getString("STATUS");
@@ -51,6 +53,14 @@ public class MenuActivity extends AppCompatActivity {
                 Intent btConnIntent = new Intent(getApplicationContext(), MainActivity.class);
                 //btConnIntent.putExtra("STATUS", statusFragment.getStatusText());
                 startActivity(btConnIntent);
+            }
+        });
+
+        bDashboard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent dashboardIntent = new Intent(getApplicationContext(), DashboardActivity.class);
+                startActivity(dashboardIntent);
             }
         });
 

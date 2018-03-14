@@ -12,22 +12,13 @@
     android:background="@color/bgColor">
 
     <Button
-        android:text="TO MENU"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/menuButton"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="5dp" />
-
-    <Button
         android:text="FIND AN OBD DEVICE AND CONNECT"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/findButton"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="134dp" />
+        android:layout_marginTop="70dp" />
 
     <fragment
         android:layout_width="wrap_content"

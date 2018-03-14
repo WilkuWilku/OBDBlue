@@ -16,16 +16,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
 public class MainActivity extends FragmentActivity {
 
-    private Button bFind, bToMenu;
-    private BluetoothConnection bluetoothConn = BluetoothConnection.getInstance();
-    private String status = "null";
-    private StatusFragment statusFragment;
     private static final int BT_REQUEST_CODE = 1;
+    private Button bFind;
+    private BluetoothConnection bluetoothConn = BluetoothConnection.getInstance();
+    private StatusFragment statusFragment;
+
 
 
     @Override
@@ -33,44 +35,30 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         bFind = (Button) findViewById(R.id.findButton);
-        bToMenu = (Button) findViewById(R.id.menuButton);
 
 
         FragmentManager fragmentManager = getSupportFragmentManager();
-        statusFragment = (StatusFragment) fragmentManager.findFragmentById(R.id.statusFragment);
-        if(savedInstanceState == null) {
-            statusFragment = new StatusFragment();
-            fragmentManager.beginTransaction().add(R.id.fragment, statusFragment).commit();
-//            statusFragment.updateStatusText();
-        }
-        //status = getIntent().getStringExtra("STATUS");
-
+        statusFragment = (StatusFragment) fragmentManager.findFragmentById(R.id.fragment);
 
         bFind.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                StatusFragment statusFrag = (StatusFragment) getSupportFragmentManager().findFragmentById(R.id.fragment);
-                statusFrag.setStatusText("Preparing to connect...");
+                statusFragment.setStatusText("Preparing to connect...");
                 connect();
             }
         });
 
-        bToMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent menuIntent = new Intent(getApplicationContext(), MenuActivity.class);
-                //menuIntent.putExtra("STATUS", t.getText());
-                startActivity(menuIntent);
-            }
-        });
     }
 
     private void connect(){
         try {
             boolean isFound = findBT();
-            if(!isFound)
+            if(!isFound) {
+                statusFragment.setStatusText("No connection");
                 return;
+            }
             UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+            statusFragment.setStatusText("Establishing connection...");
             bluetoothConn.setBTSocket(bluetoothConn.getBTDevice().createRfcommSocketToServiceRecord(uuid));
             bluetoothConn.getBTSocket().connect();
 
@@ -94,10 +82,12 @@ public class MainActivity extends FragmentActivity {
         }
         if(!bluetoothConn.getBTAdapter().isEnabled())
             return false;
-
+        statusFragment.setStatusText("Searching for bonded devices...");
         Set<BluetoothDevice> bondedDevices = bluetoothConn.getBTAdapter().getBondedDevices();
+        ArrayList<BluetoothDevice> deviceList = new ArrayList<>();
+        deviceList.addAll(bondedDevices);
         if(bondedDevices.size() > 0) {
-            bluetoothConn.setBTDevice(bondedDevices.iterator().next());
+            bluetoothConn.setBTDevice(deviceList.get(0));
             statusFragment.setStatusText("Bluetooth device found");
         }
         return true;

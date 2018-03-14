@@ -9,4 +9,6 @@
     <color name="linkColor">#e0d97f</color>
     <color name="statusColor">#5c8c52</color>
     <color name="statusTextColor">#d6fccf</color>
+    <color name="paramsBackgroundColor">#557a59</color>
+    <color name="paramsTextColor">#bfffc6</color>
 </resources>
