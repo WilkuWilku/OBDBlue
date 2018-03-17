@@ -1,7 +1,31 @@
 <resources>
     <string name="app_name">OBD Blue</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+     <!-- ConnectionActivity -->
+    <string name="connection_connect_button">Wyszukaj urządzenie OBD i połącz</string>
+
+    <!-- DashboardActivity -->
+
+    <!-- MenuActivity -->
+    <string name="menu_choose_mode_label">Wybierz tryb</string>
+    <string name="menu_terminal">Konsola</string>
+    <string name="menu_dtc">Kody błędów</string>
+    <string name="menu_dashboard">Parametry</string>
+    <string name="menu_0_100_timer">Licznik 0-100</string>
+    <string name="menu_bt_connection">Połączenie Bluetooth</string>
+    <string name="menu_settings">Ustawienia</string>
+
+    <!-- TerminalActivity -->
+    <string name="terminal_send_button">Wyślij</string>
+
+    <!-- Bluetooth Connection State -->
+    <string name="bluetooth_connected">Połączono z </string>
+    <string name="bluetooth_no_connection">Brak połączenia</string>
+    <string name="bluetooth_preparing_to_connect">Przygotowanie do połączenia...</string>
+    <string name="bluetooth_establishing_connection">Ustanawianie połączenia...</string>
+    <string name="bluetooth_connected_successfully_toast">Pomyślnie połączono z urządzeniem </string>
+    <string name="bluetooth_no_adapter_toast">Upewnij się, że Twoje urządzenie obsługuje Bluetooth</string>
+    <string name="bluetooth_searching_bonded_devices">Wyszukiwanie sparowanych urządzeń...</string>
+    <string name="bluetooth_bonded_device_found">Znaleziono sparowane urządzenie</string>
 
 </resources>

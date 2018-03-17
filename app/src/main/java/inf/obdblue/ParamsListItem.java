@@ -9,14 +9,14 @@ package inf.obdblue;
 
 public class ParamsListItem {
     private String name;
-    private double value;
+    private String value;
 
-    public ParamsListItem(String name, double value){
+    public ParamsListItem(String name, String value){
         this.name = name;
         this.value = value;
     }
 
-    public double getValue() {
+    public String getValue() {
         return value;
     }
 
@@ -24,7 +24,7 @@ public class ParamsListItem {
         return name;
     }
 
-    public void setValue(double value) {
+    public void setValue(String value) {
         this.value = value;
     }
 }

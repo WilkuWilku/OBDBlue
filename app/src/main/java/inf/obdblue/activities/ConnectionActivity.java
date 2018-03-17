@@ -1,4 +1,4 @@
-package inf.obdblue;
+package inf.obdblue.activities;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -14,6 +14,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Set;
 import java.util.UUID;
+
+import inf.obdblue.BluetoothConnection;
+import inf.obdblue.R;
+import inf.obdblue.StatusFragment;
 
 
 /* Aktywność do łączenia się z urządzeniem */
@@ -39,7 +43,7 @@ public class ConnectionActivity extends FragmentActivity {
         bFind.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                statusFragment.setStatusText("Preparing to connect...");
+                statusFragment.setStatusText(R.string.bluetooth_preparing_to_connect);
                 connect();
             }
         });
@@ -50,16 +54,16 @@ public class ConnectionActivity extends FragmentActivity {
         try {
             boolean isFound = findBT();
             if(!isFound) {
-                statusFragment.setStatusText("No connection");
+                statusFragment.setStatusText(R.string.bluetooth_no_connection);
                 return;
             }
             UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
-            statusFragment.setStatusText("Establishing connection...");
+            statusFragment.setStatusText(R.string.bluetooth_establishing_connection);
             bluetoothConn.setBTSocket(bluetoothConn.getBTDevice().createRfcommSocketToServiceRecord(uuid));
             bluetoothConn.getBTSocket().connect();
 
             statusFragment.updateStatusText();
-            Toast.makeText(getApplicationContext(), "Connected with device successfully!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), R.string.bluetooth_connected_successfully_toast+bluetoothConn.getBTDevice().getName()+"!", Toast.LENGTH_SHORT).show();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -68,8 +72,8 @@ public class ConnectionActivity extends FragmentActivity {
     private boolean findBT(){
         bluetoothConn.setBTAdapter(BluetoothAdapter.getDefaultAdapter());
         if(bluetoothConn.getBTAdapter() == null) {
-            statusFragment.setStatusText("No Bluetooth adapter available");
-            Toast.makeText(getApplicationContext(), "Make sure your device is able to use Bluetooth", Toast.LENGTH_SHORT).show();
+            //statusFragment.setStatusText("Brak adaptera Bluetooth");
+            Toast.makeText(getApplicationContext(), R.string.bluetooth_no_adapter_toast, Toast.LENGTH_SHORT).show();
             return false;
         }
         if(!bluetoothConn.getBTAdapter().isEnabled()){
@@ -78,13 +82,13 @@ public class ConnectionActivity extends FragmentActivity {
         }
         if(!bluetoothConn.getBTAdapter().isEnabled())
             return false;
-        statusFragment.setStatusText("Searching for bonded devices...");
+        statusFragment.setStatusText(R.string.bluetooth_searching_bonded_devices);
         Set<BluetoothDevice> bondedDevices = bluetoothConn.getBTAdapter().getBondedDevices();
         ArrayList<BluetoothDevice> deviceList = new ArrayList<>();
         deviceList.addAll(bondedDevices);
         if(bondedDevices.size() > 0) {
             bluetoothConn.setBTDevice(deviceList.get(0));
-            statusFragment.setStatusText("Bluetooth device found");
+            statusFragment.setStatusText(R.string.bluetooth_bonded_device_found);
         }
         return true;
     }

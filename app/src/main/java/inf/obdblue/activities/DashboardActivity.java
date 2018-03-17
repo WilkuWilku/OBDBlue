@@ -1,4 +1,4 @@
-package inf.obdblue;
+package inf.obdblue.activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -7,8 +7,11 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import java.util.ArrayList;
-import java.util.logging.Handler;
-import java.util.logging.LogRecord;
+
+import inf.obdblue.ParamsListAdapter;
+import inf.obdblue.ParamsListItem;
+import inf.obdblue.R;
+import inf.obdblue.commands.BasicCommands;
 
 public class DashboardActivity extends AppCompatActivity {
     private ArrayList<ParamsListItem> paramsListItems;
@@ -24,8 +27,8 @@ public class DashboardActivity extends AppCompatActivity {
         paramsListAdapter = new ParamsListAdapter(paramsListItems, this);
         ListView lvParams = (ListView) findViewById(R.id.paramsListView);
         lvParams.setAdapter(paramsListAdapter);
-        paramsListItems.add(new ParamsListItem(BasicCommands.ENGINE_RPM.getDescription(), 50));
-        paramsListItems.add(new ParamsListItem(BasicCommands.VEHICLE_SPEED.getDescription(), 150));
+        paramsListItems.add(new ParamsListItem(BasicCommands.ENGINE_RPM.getDescription(), "50"));
+        paramsListItems.add(new ParamsListItem(BasicCommands.VEHICLE_SPEED.getDescription(), "150"));
 
         bStart = (Button) findViewById(R.id.startButton);
         bStop = (Button) findViewById(R.id.stopButton);

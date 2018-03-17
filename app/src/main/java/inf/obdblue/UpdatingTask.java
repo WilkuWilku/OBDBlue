@@ -6,14 +6,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import inf.obdblue.commands.BasicCommands;
+
 /**
  * Created by Inf on 2018-03-14.
  */
 
 /* Wątek aktualizujący wartości parametrów */
 
-public class UpdatingTask extends AsyncTask<ArrayList<BasicCommands>, HashMap<BasicCommands, Double>, Void> {
-    private HashMap<BasicCommands, Double> valuesMap = new HashMap<>();
+public class UpdatingTask extends AsyncTask<ArrayList<BasicCommands>, HashMap<BasicCommands, String>, Void> {
+    private HashMap<BasicCommands, String> valuesMap = new HashMap<>();
     private BluetoothConnection bluetoothConnection = BluetoothConnection.getInstance();
     @Override
     protected Void doInBackground(ArrayList<BasicCommands>... params) {
@@ -32,7 +34,7 @@ public class UpdatingTask extends AsyncTask<ArrayList<BasicCommands>, HashMap<Ba
     }
 
     @Override
-    protected void onProgressUpdate(HashMap<BasicCommands, Double>... values) {
+    protected void onProgressUpdate(HashMap<BasicCommands, String>... values) {
         //TODO aktualizacja komponentów UI
         super.onProgressUpdate(values);
     }

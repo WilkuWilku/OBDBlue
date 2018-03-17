@@ -11,4 +11,6 @@
     <color name="statusTextColor">#d6fccf</color>
     <color name="paramsBackgroundColor">#557a59</color>
     <color name="paramsTextColor">#bfffc6</color>
+    <color name="consoleBgColor">#2c382e</color>
+
 </resources>

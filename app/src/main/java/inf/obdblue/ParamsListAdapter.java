@@ -36,7 +36,7 @@ public class ParamsListAdapter extends ArrayAdapter<ParamsListItem> {
         paramLabel.setText(item.getName());
 
         TextView tvValue = (TextView) convertView.findViewById(R.id.valueTextView);
-        tvValue.setText(String.valueOf(item.getValue()));
+        tvValue.setText(item.getValue());
 
         return convertView;
     }

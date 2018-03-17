@@ -1,8 +1,5 @@
-package inf.obdblue;
+package inf.obdblue.activities;
 
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -10,12 +7,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
+import inf.obdblue.R;
+import inf.obdblue.StatusFragment;
+
+
+
 /* Aktywność z menu głównym */
 
 public class MenuActivity extends AppCompatActivity {
 
-    private Button bBTConnect;
-    private Button bDashboard;
+    private Button bBTConnect, bDashboard, bTerminal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +26,7 @@ public class MenuActivity extends AppCompatActivity {
 
         bBTConnect = (Button) findViewById(R.id.bluetoothButton);
         bDashboard = (Button) findViewById(R.id.dashboardButton);
+        bTerminal = (Button) findViewById(R.id.terminalButton);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         final StatusFragment statusFragment = (StatusFragment) fragmentManager.findFragmentById(R.id.fragment);
@@ -43,6 +45,14 @@ public class MenuActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent dashboardIntent = new Intent(getApplicationContext(), DashboardActivity.class);
                 startActivity(dashboardIntent);
+            }
+        });
+
+        bTerminal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent terminalIntent = new Intent(getApplicationContext(), TerminalActivity.class);
+                startActivity(terminalIntent);
             }
         });
 
