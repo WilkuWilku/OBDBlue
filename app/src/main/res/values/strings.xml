@@ -17,6 +17,7 @@
 
     <!-- TerminalActivity -->
     <string name="terminal_send_button">Wyślij</string>
+    <string name="terminal_command_hint">Wpisz komendę</string>
 
     <!-- Bluetooth Connection State -->
     <string name="bluetooth_connected">Połączono z </string>

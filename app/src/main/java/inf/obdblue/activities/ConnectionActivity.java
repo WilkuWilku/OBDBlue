@@ -72,7 +72,6 @@ public class ConnectionActivity extends FragmentActivity {
     private boolean findBT(){
         bluetoothConn.setBTAdapter(BluetoothAdapter.getDefaultAdapter());
         if(bluetoothConn.getBTAdapter() == null) {
-            //statusFragment.setStatusText("Brak adaptera Bluetooth");
             Toast.makeText(getApplicationContext(), R.string.bluetooth_no_adapter_toast, Toast.LENGTH_SHORT).show();
             return false;
         }

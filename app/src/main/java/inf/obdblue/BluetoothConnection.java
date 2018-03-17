@@ -31,14 +31,16 @@ public class BluetoothConnection {
         return instance;
     }
 
-    public static void sendMsg(String msg) throws IOException {
+    public void sendMsg(String msg) throws IOException {
+        outputStream = BTSocket.getOutputStream();
         outputStream.write((msg+"\r").getBytes());
         outputStream.flush();
     }
 
-    public static String readMsg() throws IOException {
+    public String readMsg() throws IOException {
         final int BUFFER_SIZE = 1024;
         byte[] bytes = new byte[BUFFER_SIZE];
+        inputStream = BTSocket.getInputStream();
         inputStream.read(bytes);
         String msg = new String(bytes, "US-ASCII");
         return msg;
