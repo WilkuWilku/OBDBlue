@@ -28,9 +28,7 @@ public class MenuActivity extends AppCompatActivity {
         bDashboard = (Button) findViewById(R.id.dashboardButton);
         bTerminal = (Button) findViewById(R.id.terminalButton);
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        final StatusFragment statusFragment = (StatusFragment) fragmentManager.findFragmentById(R.id.fragment);
-        statusFragment.updateStatusText();
+        updateStatusFragment();
 
         bBTConnect.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,4 +56,15 @@ public class MenuActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateStatusFragment();
+    }
+
+    private void updateStatusFragment(){
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        final StatusFragment statusFragment = (StatusFragment) fragmentManager.findFragmentById(R.id.fragment);
+        statusFragment.updateStatusText();
+    }
 }

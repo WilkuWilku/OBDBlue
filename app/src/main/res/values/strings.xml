@@ -20,13 +20,20 @@
     <string name="terminal_command_hint">Wpisz komendę</string>
 
     <!-- Bluetooth Connection State -->
-    <string name="bluetooth_connected">Połączono z </string>
+    <string name="bluetooth_connected">Połączono z: </string>
     <string name="bluetooth_no_connection">Brak połączenia</string>
     <string name="bluetooth_preparing_to_connect">Przygotowanie do połączenia...</string>
     <string name="bluetooth_establishing_connection">Ustanawianie połączenia...</string>
-    <string name="bluetooth_connected_successfully_toast">Pomyślnie połączono z urządzeniem </string>
+    <string name="bluetooth_connected_successfully_toast">Pomyślnie połączono z urządzeniem: </string>
     <string name="bluetooth_no_adapter_toast">Upewnij się, że Twoje urządzenie obsługuje Bluetooth</string>
     <string name="bluetooth_searching_bonded_devices">Wyszukiwanie sparowanych urządzeń...</string>
     <string name="bluetooth_bonded_device_found">Znaleziono sparowane urządzenie</string>
+    <string name="bluetooth_no_bonded_devices_found">Nie znaleziono sparowanych urządzeń</string>
+
+    <!-- DeviceDialog -->
+    <string name="device_dialog_message">Wybierz urządzenie: </string>
+    <string name="device_dialog_connect">Połącz</string>
+    <string name="device_dialog_cancel">Anuluj</string>
+    <string name="device_dialog_title">Połącz z urządzeniem</string>
 
 </resources>
