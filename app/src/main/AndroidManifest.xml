@@ -21,7 +21,8 @@
         </activity>
         <activity android:name=".activities.ConnectionActivity" />
         <activity android:name=".activities.DashboardActivity" />
-        <activity android:name=".activities.TerminalActivity"></activity>
+        <activity android:name=".activities.TerminalActivity" />
+        <activity android:name=".activities.SettingsActivity"></activity>
     </application>
 
 </manifest>

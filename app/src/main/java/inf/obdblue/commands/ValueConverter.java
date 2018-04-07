@@ -5,6 +5,6 @@ package inf.obdblue.commands;
  */
 
 public interface ValueConverter {
-    double convertResponse(double value);
+    double convertResponse(int byteA, int byteB, int byteC, int byteD);
 
 }

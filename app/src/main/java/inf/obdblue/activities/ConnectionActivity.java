@@ -11,6 +11,7 @@ import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -39,7 +40,6 @@ public class ConnectionActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_connection);
         bFind = (Button) findViewById(R.id.findButton);
-
         FragmentManager fragmentManager = getSupportFragmentManager();
         statusFragment = (StatusFragment) fragmentManager.findFragmentById(R.id.fragment);
 
@@ -81,7 +81,7 @@ public class ConnectionActivity extends FragmentActivity {
         }
     }
 
-    private String[] getDevicesNames(ArrayList<BluetoothDevice> devices){
+    private final String[] getDevicesNames(ArrayList<BluetoothDevice> devices){
         String[] devicesNames = new String[devices.size()];
         for(int i=0; i<devices.size(); i++)
             devicesNames[i] = devices.get(i).getName();
@@ -90,10 +90,15 @@ public class ConnectionActivity extends FragmentActivity {
 
     private void selectDeviceAndConnect(final ArrayList<BluetoothDevice> deviceList){
         AlertDialog dialog;
+        Log.i(TAG, "DEVICES on list: "+deviceList.size());
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(R.string.device_dialog_message)
-                .setCancelable(true)
-                .setSingleChoiceItems(getDevicesNames(deviceList), checkedDevicePosition, null)
+        builder.setCancelable(true)
+                .setSingleChoiceItems(getDevicesNames(deviceList), -1, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Log.i(TAG, "Item has been clicked");
+                    }
+                })
                 .setTitle(R.string.device_dialog_title)
                 .setNegativeButton(R.string.device_dialog_cancel, new DialogInterface.OnClickListener() {
                     @Override
@@ -119,7 +124,9 @@ public class ConnectionActivity extends FragmentActivity {
                             statusFragment.updateStatusText();
                             Toast.makeText(getApplicationContext(), R.string.bluetooth_connected_successfully_toast+" "+bluetoothConn.getBTDevice().getName()+"!", Toast.LENGTH_SHORT).show();
                         } catch (IOException e) {
-                        e.printStackTrace();
+                            Toast.makeText(getApplicationContext(), R.string.bluetooth_connection_error, Toast.LENGTH_SHORT).show();
+                            statusFragment.updateStatusText();
+                            e.printStackTrace();
                     }
                         dialog.dismiss();
                     }
@@ -127,6 +134,4 @@ public class ConnectionActivity extends FragmentActivity {
         dialog = builder.create();
         dialog.show();
     }
-
-
 }

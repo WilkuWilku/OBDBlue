@@ -40,13 +40,10 @@ public class TerminalActivity extends AppCompatActivity {
         });
     }
 
-
-
-
-
     private class SingleCommandTask extends AsyncTask<String, Void, String> {
         private BluetoothConnection btConnection = BluetoothConnection.getInstance();
         private String command = "No command";
+
         @Override
         protected String doInBackground(String... params) {
             String response = "NO RESPONSE";
@@ -63,16 +60,25 @@ public class TerminalActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String response) {
             final int CONSOLE_MAX_LINES = tvConsole.getLineCount();
-            StringBuilder stringBuilder = new StringBuilder(tvConsole.getText());
+            /* usuń dwa ostatnie wpisy */
             if(consoleLinesList.size() == CONSOLE_MAX_LINES) {
                 consoleLinesList.remove(1);
                 consoleLinesList.remove(0);
             }
+            StringBuilder stringBuilder = new StringBuilder(linesListToString());
+            /* dodaj i wypisz nową komendę oraz odpowiedź */
             consoleLinesList.add(command);
             consoleLinesList.add(response);
             stringBuilder.append(command+"\n");
             stringBuilder.append(response+"\n");
             tvConsole.setText(stringBuilder.toString());
         }
+    }
+
+    private String linesListToString(){
+        StringBuilder stringBuilder = new StringBuilder();
+        for(String line : consoleLinesList)
+            stringBuilder.append(line+"\n");
+        return stringBuilder.toString();
     }
 }

@@ -37,7 +37,8 @@ public class StatusFragment extends Fragment {
 
     public void setStatusText(int stringID){
         TextView tvStatus = (TextView) getView().findViewById(R.id.statusTextView);
-        tvStatus.setText(stringID);
+        String status = getResources().getString(stringID);
+        tvStatus.setText(status);
     }
 
     public void updateStatusText(){

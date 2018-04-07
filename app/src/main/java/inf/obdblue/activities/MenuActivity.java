@@ -16,44 +16,51 @@ import inf.obdblue.StatusFragment;
 
 public class MenuActivity extends AppCompatActivity {
 
-    private Button bBTConnect, bDashboard, bTerminal;
+    private Button bBTConnect, bDashboard, bTerminal, bSettings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 
-
         bBTConnect = (Button) findViewById(R.id.bluetoothButton);
         bDashboard = (Button) findViewById(R.id.dashboardButton);
         bTerminal = (Button) findViewById(R.id.terminalButton);
+        bSettings = (Button) findViewById(R.id.settingsButton);
 
         updateStatusFragment();
 
         bBTConnect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent btConnIntent = new Intent(getApplicationContext(), ConnectionActivity.class);
-                startActivity(btConnIntent);
+                Intent intent = new Intent(getApplicationContext(), ConnectionActivity.class);
+                startActivity(intent);
             }
         });
 
         bDashboard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent dashboardIntent = new Intent(getApplicationContext(), DashboardActivity.class);
-                startActivity(dashboardIntent);
+                Intent intent = new Intent(getApplicationContext(), DashboardActivity.class);
+                startActivity(intent);
             }
         });
 
         bTerminal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent terminalIntent = new Intent(getApplicationContext(), TerminalActivity.class);
-                startActivity(terminalIntent);
+                Intent intent = new Intent(getApplicationContext(), TerminalActivity.class);
+                startActivity(intent);
             }
         });
 
+        bSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override

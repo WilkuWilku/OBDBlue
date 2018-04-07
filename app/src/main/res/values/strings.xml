@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">OBD Blue</string>
 
-     <!-- ConnectionActivity -->
+    <!-- ConnectionActivity -->
     <string name="connection_connect_button">Wyszukaj urządzenie OBD i połącz</string>
 
     <!-- DashboardActivity -->
@@ -19,7 +19,7 @@
     <string name="terminal_send_button">Wyślij</string>
     <string name="terminal_command_hint">Wpisz komendę</string>
 
-    <!-- Bluetooth Connection State -->
+    <!-- Połączenie Bluetooth -->
     <string name="bluetooth_connected">Połączono z: </string>
     <string name="bluetooth_no_connection">Brak połączenia</string>
     <string name="bluetooth_preparing_to_connect">Przygotowanie do połączenia...</string>
@@ -29,11 +29,19 @@
     <string name="bluetooth_searching_bonded_devices">Wyszukiwanie sparowanych urządzeń...</string>
     <string name="bluetooth_bonded_device_found">Znaleziono sparowane urządzenie</string>
     <string name="bluetooth_no_bonded_devices_found">Nie znaleziono sparowanych urządzeń</string>
+    <string name="bluetooth_connection_error">Wystąpił błąd połączenia</string>
 
     <!-- DeviceDialog -->
-    <string name="device_dialog_message">Wybierz urządzenie: </string>
     <string name="device_dialog_connect">Połącz</string>
     <string name="device_dialog_cancel">Anuluj</string>
     <string name="device_dialog_title">Połącz z urządzeniem</string>
+
+    <!-- Nazwy komend OBD -->
+    <string name="cmd_engine_rpm">Obroty silnika</string>
+    <string name="cmd_vehicle_speed">Prędkość pojazdu</string>
+
+    <!-- Jednostki -->
+    <string name="units_rpm">obr/min</string>
+    <string name="units_speed">km/h</string>
 
 </resources>

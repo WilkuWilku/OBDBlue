@@ -7,19 +7,30 @@ package inf.obdblue.commands;
 /* Klasa z podstawowymi komendami dla MODE 01 */
 
 public enum BasicCommands implements ValueConverter{
-    ENGINE_RPM("Engine RPM", "010C", 2),
-    VEHICLE_SPEED("Vehicle speed", "010D", 1);
+    ENGINE_RPM("Obroty silnika", "010C", "obr/min"){
+        @Override
+        public double convertResponse(int byteA, int byteB, int byteC, int byteD) {
+            return (256*byteA+byteB)/4;
+        }
+    },
+    VEHICLE_SPEED("Prędkość pojazdu", "010D", "km/h"){
+        @Override
+        public double convertResponse(int byteA, int byteB, int byteC, int byteD) {
+            return byteA;
+        }
+    };
 
 
-    BasicCommands(String description, String command, int bytesReturned){
+    BasicCommands(String description, String command, String units){
         this.description = description;
         this.command = command;
-        this.bytesReturned = bytesReturned;
+        this.units = units;
+
     }
 
     private String description;
     private String command;
-    private int bytesReturned;
+    private String units;
 
     public String getCommand() {
         return command;
@@ -27,14 +38,13 @@ public enum BasicCommands implements ValueConverter{
     public String getDescription() {
         return description;
     }
-
-    public int getBytesReturned() {
-        return bytesReturned;
+    public String getUnits() {
+        return units;
     }
+
 
     @Override
-    public double convertResponse(double value) {
-        return value;
+    public double convertResponse(int byteA, int byteB, int byteC, int byteD) {
+        return 0;
     }
-
 }

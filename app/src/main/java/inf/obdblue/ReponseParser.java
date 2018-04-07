@@ -1,5 +1,7 @@
 package inf.obdblue;
 
+import java.math.BigInteger;
+
 /**
  * Created by Inf on 2018-03-14.
  */
@@ -7,15 +9,23 @@ package inf.obdblue;
 /* Klasa zamieniająca odpowiedź urządzenia na zrozumiałą daną */
 
 public final class ReponseParser {
-    public static String parse(String response){
-        //TODO dokończyć funkcję parsującą
-        return response;
-    }
-    public static int[] splitToBytes(String response, int bytesReturned){
-        final int OFFSET = 2;
+
+    public static int[] parseToUnsignedBytesArray(String response){
+        /* pierwszy podłańcuch to "SEARCHING...", a dwa kolejne bajty nie należą do wartości */
+        final int OFFSET = 3;
+        /* podział na bajty */
         String[] stringBytes = response.split("\\s+");
-        byte[] result = new byte[stringBytes.length-OFFSET];
-        for(int i=0; i<stringBytes.length-OFFSET; i++);
-        return null;
+        /* odpowiedź "NO DATA" */
+        if(stringBytes[0].toLowerCase() == "no")
+            return new int[]{-1,0,0,0};
+        /* parsowanie na bajty ze znakiem */
+        byte[] signedBytes = new byte[stringBytes.length-OFFSET];
+        for(int i=0; i<stringBytes.length-OFFSET; i++)
+            signedBytes[i] = new BigInteger(stringBytes[i+OFFSET], 16).byteValue();
+        /* konwersja na 4 bajty bez znaku */
+        int[] unsignedBytes = new int[4];
+        for(int i=0; i<signedBytes.length; i++)
+            unsignedBytes[i] = signedBytes[i] & 0xFF;
+        return unsignedBytes;
     }
 }
