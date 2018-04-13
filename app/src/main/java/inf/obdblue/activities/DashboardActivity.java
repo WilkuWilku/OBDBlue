@@ -12,7 +12,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Set;
 
@@ -50,10 +52,10 @@ public class DashboardActivity extends AppCompatActivity {
         bStart = (Button) findViewById(R.id.startButton);
         bStop = (Button) findViewById(R.id.stopButton);
         bStop.setEnabled(false);
-        final UpdatingTask updatingTask = new UpdatingTask();
         bStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                final UpdatingTask updatingTask = new UpdatingTask();
                 bStart.setEnabled(false);
                 bStop.setEnabled(true);
                 updatingTask.execute(commandsToExecute);
@@ -65,7 +67,7 @@ public class DashboardActivity extends AppCompatActivity {
             public void onClick(View v) {
                 bStop.setEnabled(false);
                 bStart.setEnabled(true);
-                updatingTask.cancel(true);
+                //updatingTask.cancel(true);
             }
         });
     }
@@ -79,7 +81,7 @@ public class DashboardActivity extends AppCompatActivity {
             HashMap<BasicCommands, String> valuesMap = new HashMap<>();
             ArrayList<BasicCommands> commandsList = params[0];
             String response;
-            while(!isCancelled()) {
+            //while(!isCancelled()) {
                 for (BasicCommands command : commandsList) {
                     try {
                         bluetoothConnection.sendMsg(command.getCommand());
@@ -90,8 +92,16 @@ public class DashboardActivity extends AppCompatActivity {
                         publishProgress(valuesMap);
                     } catch (IOException e) {
                         try {
+                            File file = new File(getFilesDir(), logFileName);
+                            if(file == null)
+                                file.createNewFile();
                             OutputStream os = openFileOutput(logFileName, Context.MODE_PRIVATE);
-                            os.write(e.getStackTrace().toString().getBytes());
+                            os.write(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(Calendar.getInstance().getTime()).getBytes());
+                            os.write("\n".getBytes());
+                            for(StackTraceElement stackTraceElement : e.getStackTrace()) {
+                                os.write(stackTraceElement.toString().getBytes());
+                                os.write("\n".getBytes());
+                            }
                             os.close();
                         } catch (FileNotFoundException e1) {
                             e1.printStackTrace();
@@ -101,7 +111,7 @@ public class DashboardActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 }
-            }
+            //}
             return null;
         }
 

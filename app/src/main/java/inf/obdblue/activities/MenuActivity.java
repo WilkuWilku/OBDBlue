@@ -16,7 +16,7 @@ import inf.obdblue.StatusFragment;
 
 public class MenuActivity extends AppCompatActivity {
 
-    private Button bBTConnect, bDashboard, bTerminal, bSettings;
+    private Button bBTConnect, bDashboard, bTerminal, bSettings, bDTC;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +27,7 @@ public class MenuActivity extends AppCompatActivity {
         bDashboard = (Button) findViewById(R.id.dashboardButton);
         bTerminal = (Button) findViewById(R.id.terminalButton);
         bSettings = (Button) findViewById(R.id.settingsButton);
+        bDTC = (Button) findViewById(R.id.dtcButton);
 
         updateStatusFragment();
 
@@ -61,6 +62,14 @@ public class MenuActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        bDTC.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), DTCActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -74,4 +83,6 @@ public class MenuActivity extends AppCompatActivity {
         final StatusFragment statusFragment = (StatusFragment) fragmentManager.findFragmentById(R.id.fragment);
         statusFragment.updateStatusText();
     }
+
+
 }

@@ -45,8 +45,9 @@ public class StatusFragment extends Fragment {
         TextView tvStatus = (TextView) getView().findViewById(R.id.statusTextView);
         if(bluetoothConnection.getBTSocket() == null || !bluetoothConnection.getBTSocket().isConnected())
             tvStatus.setText(R.string.bluetooth_no_connection);
+
         else
-            tvStatus.setText(R.string.bluetooth_connected+" "+bluetoothConnection.getBTDevice().getName());
+            tvStatus.setText(getString(R.string.bluetooth_connected)+" "+bluetoothConnection.getBTDevice().getName());
     }
 
 }

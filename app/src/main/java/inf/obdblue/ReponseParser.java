@@ -12,7 +12,7 @@ public final class ReponseParser {
 
     public static int[] parseToUnsignedBytesArray(String response){
         /* pierwszy podłańcuch to "SEARCHING...", a dwa kolejne bajty nie należą do wartości */
-        final int OFFSET = 3;
+        final int OFFSET = response.startsWith("SEARCHING") ? 3 : 2;
         /* podział na bajty */
         String[] stringBytes = response.split("\\s+");
         /* odpowiedź "NO DATA" */

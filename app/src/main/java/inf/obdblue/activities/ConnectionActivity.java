@@ -42,12 +42,10 @@ public class ConnectionActivity extends FragmentActivity {
         bFind = (Button) findViewById(R.id.findButton);
         FragmentManager fragmentManager = getSupportFragmentManager();
         statusFragment = (StatusFragment) fragmentManager.findFragmentById(R.id.fragment);
-
         bFind.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 statusFragment.setStatusText(R.string.bluetooth_preparing_to_connect);
-                Log.i(TAG, "pre selectDeviceAndConnect");
                 findBT();
             }
         });
@@ -55,7 +53,6 @@ public class ConnectionActivity extends FragmentActivity {
     }
 
     private void findBT(){
-        Log.i(TAG, "FindBT started");
         bluetoothConn.setBTAdapter(BluetoothAdapter.getDefaultAdapter());
         if(bluetoothConn.getBTAdapter() == null) {
             Toast.makeText(getApplicationContext(), R.string.bluetooth_no_adapter_toast, Toast.LENGTH_SHORT).show();
@@ -72,7 +69,6 @@ public class ConnectionActivity extends FragmentActivity {
         deviceList.addAll(bondedDevices);
         if(bondedDevices.size() > 0) {
             statusFragment.setStatusText(R.string.bluetooth_bonded_device_found);
-            Log.i(TAG, "pre dialog");
             selectDeviceAndConnect(deviceList);
         }
         else {
@@ -84,19 +80,17 @@ public class ConnectionActivity extends FragmentActivity {
     private final String[] getDevicesNames(ArrayList<BluetoothDevice> devices){
         String[] devicesNames = new String[devices.size()];
         for(int i=0; i<devices.size(); i++)
-            devicesNames[i] = devices.get(i).getName();
+            devicesNames[i] = devices.get(i).getName() + " (MAC: "+devices.get(i).getAddress()+")";
         return devicesNames;
     }
 
     private void selectDeviceAndConnect(final ArrayList<BluetoothDevice> deviceList){
         AlertDialog dialog;
-        Log.i(TAG, "DEVICES on list: "+deviceList.size());
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(true)
                 .setSingleChoiceItems(getDevicesNames(deviceList), -1, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Log.i(TAG, "Item has been clicked");
                     }
                 })
                 .setTitle(R.string.device_dialog_title)
@@ -111,18 +105,14 @@ public class ConnectionActivity extends FragmentActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         checkedDevicePosition = ((AlertDialog)dialog).getListView().getCheckedItemPosition();
-                        Log.i(TAG, "just after dialog");
                         bluetoothConn.setBTDevice(deviceList.get(checkedDevicePosition));
-                        Log.i(TAG, "device is set");
                         UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
                         statusFragment.setStatusText(R.string.bluetooth_establishing_connection);
-                        Log.i(TAG, "pre socket");
                         try {
                             bluetoothConn.setBTSocket(bluetoothConn.getBTDevice().createRfcommSocketToServiceRecord(uuid));
-                            Log.i(TAG, "after socket");
                             bluetoothConn.getBTSocket().connect();
                             statusFragment.updateStatusText();
-                            Toast.makeText(getApplicationContext(), R.string.bluetooth_connected_successfully_toast+" "+bluetoothConn.getBTDevice().getName()+"!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), getString(R.string.bluetooth_connected_successfully_toast)+" "+bluetoothConn.getBTDevice().getName()+"!", Toast.LENGTH_SHORT).show();
                         } catch (IOException e) {
                             Toast.makeText(getApplicationContext(), R.string.bluetooth_connection_error, Toast.LENGTH_SHORT).show();
                             statusFragment.updateStatusText();
