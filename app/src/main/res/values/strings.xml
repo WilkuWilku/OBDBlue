@@ -3,6 +3,7 @@
 
     <!-- ConnectionActivity -->
     <string name="connection_connect_button">Wyszukaj urządzenie OBD i połącz</string>
+    <string name="connection_disconnect_button">Rozłącz z urządzeniem</string>
 
     <!-- DashboardActivity -->
 

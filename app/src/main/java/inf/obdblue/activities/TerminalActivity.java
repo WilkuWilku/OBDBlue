@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -49,8 +50,12 @@ public class TerminalActivity extends AppCompatActivity {
             String response = "NO RESPONSE";
             command = params[0];
             try {
+                /* wyślij komendę do urządzenia */
                 btConnection.sendMsg(params[0]);
+                /* odczytaj odpowiedź */
                 response = btConnection.readMsg();
+                /* wyświetl odpowiedź */
+                Toast.makeText(getApplicationContext(), "RESP: "+response, Toast.LENGTH_LONG).show();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -75,6 +80,7 @@ public class TerminalActivity extends AppCompatActivity {
         }
     }
 
+    /* zamień linijki w terminalu na jednego Stringa */
     private String linesListToString(){
         StringBuilder stringBuilder = new StringBuilder();
         for(String line : consoleLinesList)

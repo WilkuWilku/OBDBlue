@@ -42,6 +42,7 @@ public class StatusFragment extends Fragment {
     }
 
     public void updateStatusText(){
+        /* aktualizacja tekstu statusu połączenia */
         TextView tvStatus = (TextView) getView().findViewById(R.id.statusTextView);
         if(bluetoothConnection.getBTSocket() == null || !bluetoothConnection.getBTSocket().isConnected())
             tvStatus.setText(R.string.bluetooth_no_connection);

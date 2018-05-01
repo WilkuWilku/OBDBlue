@@ -29,4 +29,12 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
+    <Button
+        android:text="@string/connection_disconnect_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/findButton"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/disconnectButton" />
+
 </RelativeLayout>

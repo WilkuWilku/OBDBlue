@@ -34,7 +34,7 @@ public class BluetoothConnection {
     public void sendMsg(String msg) throws IOException {
         outputStream = BTSocket.getOutputStream();
         outputStream.write((msg+"\r").getBytes());
-        //outputStream.flush();
+        outputStream.flush();
     }
 
     public String readMsg() throws IOException {
@@ -68,5 +68,14 @@ public class BluetoothConnection {
 
     public BluetoothSocket getBTSocket() {
         return BTSocket;
+    }
+
+    public void closeAll() throws IOException{
+        if (outputStream != null)
+            outputStream.close();
+        if (inputStream != null)
+            inputStream.close();
+        if (BTSocket != null)
+            BTSocket.close();
     }
 }

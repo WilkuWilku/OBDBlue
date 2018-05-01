@@ -8,8 +8,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
@@ -37,15 +35,18 @@ public class DashboardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
 
+        /* dodaj wszystkie komendy, jakie będą wykonywane */
         commandsToExecute = new ArrayList<>();
         commandsToExecute.add(BasicCommands.ENGINE_RPM);
         commandsToExecute.add(BasicCommands.VEHICLE_SPEED);
 
+        /* lista do wyświetlania wyników */
         paramsListItems = new ArrayList<>();
         paramsListAdapter = new ParamsListAdapter(paramsListItems, this);
         ListView lvParams = (ListView) findViewById(R.id.paramsListView);
         lvParams.setAdapter(paramsListAdapter);
 
+        /* dodaj pozycje do listy wyników */
         for(int i=0; i<commandsToExecute.size(); i++)
             paramsListItems.add(new ParamsListItem(commandsToExecute.get(i).getDescription(), "NULL"));
 
@@ -84,31 +85,43 @@ public class DashboardActivity extends AppCompatActivity {
             //while(!isCancelled()) {
                 for (BasicCommands command : commandsList) {
                     try {
+                        /* wyślij komendę do urządzenia */
                         bluetoothConnection.sendMsg(command.getCommand());
+                        /* odczytaj odpowiedź */
                         response = bluetoothConnection.readMsg();
+                        /* parsuj odpowiedź na wartości A, B, C, D */
                         int[] dataBytes = ReponseParser.parseToUnsignedBytesArray(response);
+                        /* przekonwertuj na ostateczny wynik */
                         double value = command.convertResponse(dataBytes[0], dataBytes[1], dataBytes[2], dataBytes[3]);
+                        /* dodaj do mapy wyników */
                         valuesMap.put(command, value + " " + command.getUnits());
                         publishProgress(valuesMap);
                     } catch (IOException e) {
+                        /* zapisz błąd w pliku */
                         try {
-                            File file = new File(getFilesDir(), logFileName);
-                            if(file == null)
-                                file.createNewFile();
                             OutputStream os = openFileOutput(logFileName, Context.MODE_PRIVATE);
                             os.write(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(Calendar.getInstance().getTime()).getBytes());
-                            os.write("\n".getBytes());
+                            os.write(("\nDASHBOARD: "+e.getMessage()+"\n").getBytes());
                             for(StackTraceElement stackTraceElement : e.getStackTrace()) {
-                                os.write(stackTraceElement.toString().getBytes());
-                                os.write("\n".getBytes());
+                                os.write((stackTraceElement.toString()+"\n").getBytes());
                             }
                             os.close();
-                        } catch (FileNotFoundException e1) {
-                            e1.printStackTrace();
                         } catch (IOException e1) {
                             e1.printStackTrace();
                         }
                         e.printStackTrace();
+                    }catch (Exception e){
+                        try{
+                        OutputStream os = openFileOutput(logFileName, Context.MODE_PRIVATE);
+                        os.write(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(Calendar.getInstance().getTime()).getBytes());
+                        os.write(("\nPARSER: "+e.getMessage()+"\n").getBytes());
+                        for(StackTraceElement stackTraceElement : e.getStackTrace()) {
+                            os.write((stackTraceElement.toString()+"\n").getBytes());
+                        }
+                        os.close();
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
                     }
                 }
             //}

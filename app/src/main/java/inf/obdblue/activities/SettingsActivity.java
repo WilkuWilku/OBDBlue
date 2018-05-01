@@ -26,15 +26,31 @@ public class SettingsActivity extends AppCompatActivity {
 
         tvLogs = (TextView) findViewById(R.id.logTextView);
         tvLogs.setMovementMethod(new ScrollingMovementMethod());
-        File file = new File(getFilesDir(), DashboardActivity.logFileName);
+        File dashboardLogfile = new File(getFilesDir(), DashboardActivity.logFileName);
+        File btConnLogfile = new File(getFilesDir(), ConnectionActivity.logFileName);
+        /* odczyt błędów zebranych w pliku */
         try {
-            FileReader fileReader = new FileReader(file);
+            FileReader fileReader = new FileReader(dashboardLogfile);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
             StringBuilder stringBuilder = new StringBuilder("### DASHBOARD LOG ###\n");
             String line = "";
             while((line = bufferedReader.readLine()) != null)
                 stringBuilder.append(line+"\n");
             tvLogs.setText(stringBuilder.toString());
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            FileReader fileReader = new FileReader(btConnLogfile);
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            StringBuilder stringBuilder = new StringBuilder("### BLUETOOTH CONNECTION LOG ###\n");
+            String line = "";
+            while((line = bufferedReader.readLine()) != null)
+                stringBuilder.append(line+"\n");
+            String currentLog = tvLogs.getText().toString();
+            tvLogs.setText(currentLog+"\n\n"+stringBuilder.toString());
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
