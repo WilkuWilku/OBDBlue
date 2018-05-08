@@ -12,7 +12,7 @@
     android:background="@color/bgColor">
 
     <Button
-        android:text="Napraw samochód"
+        android:text="Usuń kody błędów"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
@@ -31,6 +31,5 @@
         android:width="400dp"
         android:textSize="22sp"
         android:textColor="@android:color/white"
-        android:text="Samochód jest zepsuty"
         android:gravity="center" />
 </RelativeLayout>

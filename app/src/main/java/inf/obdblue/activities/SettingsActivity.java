@@ -3,7 +3,6 @@ package inf.obdblue.activities;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
-import android.widget.Button;
 import android.widget.TextView;
 
 import java.io.BufferedReader;
@@ -13,7 +12,6 @@ import java.io.FileReader;
 import java.io.IOException;
 
 import inf.obdblue.R;
-import inf.obdblue.commands.BasicCommands;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -26,26 +24,20 @@ public class SettingsActivity extends AppCompatActivity {
 
         tvLogs = (TextView) findViewById(R.id.logTextView);
         tvLogs.setMovementMethod(new ScrollingMovementMethod());
-        File dashboardLogfile = new File(getFilesDir(), DashboardActivity.logFileName);
-        File btConnLogfile = new File(getFilesDir(), ConnectionActivity.logFileName);
+        File dashboardLogfile = new File(getFilesDir(), DashboardActivity.logfileName);
+        File btConnLogfile = new File(getFilesDir(), ConnectionActivity.logfileName);
+        File terminalLogfile = new File(getFilesDir(), TerminalActivity.LogfileName);
         /* odczyt błędów zebranych w pliku */
+        readLog(dashboardLogfile, "--- DASHBOARD ACTIVITY LOG ---\n");
+        readLog(btConnLogfile, "--- CONNECTION ACTIVITY LOG ---\n");
+        readLog(terminalLogfile, "--- TERMINAL ACTIVITY LOG ---\n");
+    }
+
+    private void readLog(File file, String title){
         try {
-            FileReader fileReader = new FileReader(dashboardLogfile);
+            FileReader fileReader = new FileReader(file);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
-            StringBuilder stringBuilder = new StringBuilder("### DASHBOARD LOG ###\n");
-            String line = "";
-            while((line = bufferedReader.readLine()) != null)
-                stringBuilder.append(line+"\n");
-            tvLogs.setText(stringBuilder.toString());
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            FileReader fileReader = new FileReader(btConnLogfile);
-            BufferedReader bufferedReader = new BufferedReader(fileReader);
-            StringBuilder stringBuilder = new StringBuilder("### BLUETOOTH CONNECTION LOG ###\n");
+            StringBuilder stringBuilder = new StringBuilder(title);
             String line = "";
             while((line = bufferedReader.readLine()) != null)
                 stringBuilder.append(line+"\n");
@@ -56,7 +48,7 @@ public class SettingsActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
     }
 }
+
+

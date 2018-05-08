@@ -1,61 +1,62 @@
 package inf.obdblue.activities;
 
+import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.ProgressBar;
+import android.widget.ListView;
 import android.widget.Toast;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Set;
 import java.util.UUID;
 
 import inf.obdblue.BluetoothConnection;
 import inf.obdblue.R;
 import inf.obdblue.StatusFragment;
+import inf.obdblue.Utils;
 
 
 /* Aktywność do łączenia się z urządzeniem */
 
 public class ConnectionActivity extends FragmentActivity {
-    public static final String logFileName = "btConnLogfile";
+    private Activity instance = this;
+    public static final String logfileName = "btConnLogfile";
     private static final String TAG = "CONNECTION_ACTIVITY";
-    private static final int BT_REQUEST_CODE = 1;
     private Button bFind, bDisconnect;
     private BluetoothConnection bluetoothConn = BluetoothConnection.getInstance();
     private StatusFragment statusFragment;
     private int checkedDevicePosition = 0;
+    private ListView lvDevices;
+    private ArrayList<BluetoothDevice> devicesList;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_connection);
+
+        lvDevices = (ListView) findViewById(R.id.deviceList);
         bFind = (Button) findViewById(R.id.findButton);
         bDisconnect = (Button) findViewById(R.id.disconnectButton);
         bDisconnect.setEnabled(false);
+
         FragmentManager fragmentManager = getSupportFragmentManager();
         statusFragment = (StatusFragment) fragmentManager.findFragmentById(R.id.fragment);
         bFind.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                statusFragment.setStatusText(R.string.bluetooth_preparing_to_connect);
-                findBT();
+                statusFragment.setStatusText(R.string.bluetooth_searching_devices);
+                devicesList = bluetoothConn.searchBTDevices(instance, lvDevices, statusFragment);
+                //if(devices != null && devices.size() > 0)
+                    //selectDeviceAndConnect(devices);
             }
         });
         bDisconnect.setOnClickListener(new View.OnClickListener() {
@@ -73,34 +74,15 @@ public class ConnectionActivity extends FragmentActivity {
                 bDisconnect.setEnabled(false);
             }
         });
+        lvDevices.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                bluetoothConn.getBTAdapter().cancelDiscovery();
+                BluetoothDevice device = devicesList.get(position);
+                connectWithDevice(device);
+            }
+        });
 
-    }
-
-    private void findBT(){
-        bluetoothConn.setBTAdapter(BluetoothAdapter.getDefaultAdapter());
-        /* sprawdź, czy urządzenie obsługuje Bluetooth */
-        if(bluetoothConn.getBTAdapter() == null) {
-            Toast.makeText(getApplicationContext(), R.string.bluetooth_no_adapter_toast, Toast.LENGTH_SHORT).show();
-        }
-        /* włącz Bluetooth, jeśli jest wyłączone */
-        if(!bluetoothConn.getBTAdapter().isEnabled()){
-            Intent enableBT = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableBT, BT_REQUEST_CODE);
-            return;
-        }
-        /* wyszukaj sparowane urządzenia */
-        statusFragment.setStatusText(R.string.bluetooth_searching_bonded_devices);
-        Set<BluetoothDevice> bondedDevices = bluetoothConn.getBTAdapter().getBondedDevices();
-        ArrayList<BluetoothDevice> deviceList = new ArrayList<>();
-        deviceList.addAll(bondedDevices);
-        if(bondedDevices.size() > 0) {
-            statusFragment.setStatusText(R.string.bluetooth_bonded_device_found);
-            selectDeviceAndConnect(deviceList);
-        }
-        else {
-            statusFragment.setStatusText(R.string.bluetooth_no_connection);
-            Toast.makeText(getApplicationContext(), R.string.bluetooth_no_bonded_devices_found, Toast.LENGTH_SHORT).show();
-        }
     }
 
     /* lista Stringów z adresami MAC powiązanych urządzeń */
@@ -151,27 +133,50 @@ public class ConnectionActivity extends FragmentActivity {
                             Toast.makeText(getApplicationContext(), R.string.bluetooth_connection_error, Toast.LENGTH_SHORT).show();
                             statusFragment.updateStatusText();
                             /* zapisz błąd w pliku */
-                            try {
-                                File file = new File(getFilesDir(), logFileName);
-                                if(file == null)
-                                    file.createNewFile();
-                                OutputStream os = openFileOutput(logFileName, Context.MODE_PRIVATE);
-                                os.write(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(Calendar.getInstance().getTime()).getBytes());
-                                os.write(("\n"+e.getMessage()+"\n").getBytes());
-                                for(StackTraceElement stackTraceElement : e.getStackTrace()) {
-                                    os.write((stackTraceElement.toString()+"\n").getBytes());
-                                }
-                                os.close();
-                            } catch (FileNotFoundException e1) {
-                                e1.printStackTrace();
-                            } catch (IOException e1) {
-                                e1.printStackTrace();
-                            }
-                    }
+                            Utils.saveLogInFile(logfileName, e, getApplicationContext());
+                        }
                         dialog.dismiss();
                     }
                 });
         dialog = builder.create();
         dialog.show();
+    }
+
+    private void connectWithDevice(BluetoothDevice device) {
+        bluetoothConn.setBTDevice(device);
+        UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+        statusFragment.setStatusText(R.string.bluetooth_establishing_connection);
+        try {
+            /* utwórz gniazdo */
+            bluetoothConn.setBTSocket(bluetoothConn.getBTDevice().createRfcommSocketToServiceRecord(uuid));
+            bluetoothConn.getBTSocket().connect();
+            /* odśwież status */
+            statusFragment.updateStatusText();
+            Toast.makeText(getApplicationContext(), getString(R.string.bluetooth_connected_successfully_toast) + " " + bluetoothConn.getBTDevice().getName(), Toast.LENGTH_SHORT).show();
+            /* włącz rozłączanie, wyłącz wyszukiwanie urządzeń */
+            bDisconnect.setEnabled(true);
+            bFind.setEnabled(false);
+        } catch (IOException e) {
+            Toast.makeText(getApplicationContext(), R.string.bluetooth_connection_error, Toast.LENGTH_SHORT).show();
+            statusFragment.updateStatusText();
+            /* zapisz błąd w pliku */
+            Utils.saveLogInFile(logfileName, e, getApplicationContext());
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        BluetoothAdapter adapter = bluetoothConn.getBTAdapter();
+        if(adapter != null && adapter.isDiscovering())
+            bluetoothConn.getBTAdapter().cancelDiscovery();
+        super.onBackPressed();
+    }
+
+    @Override
+    protected void onDestroy() {
+        try {
+            unregisterReceiver(bluetoothConn.getBroadcastReceiver());
+        } catch (Exception e) {}
+        super.onDestroy();
     }
 }

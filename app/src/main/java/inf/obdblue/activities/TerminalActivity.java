@@ -14,10 +14,11 @@ import java.util.ArrayList;
 
 import inf.obdblue.BluetoothConnection;
 import inf.obdblue.R;
+import inf.obdblue.Utils;
 
 
 public class TerminalActivity extends AppCompatActivity {
-
+    public static final String LogfileName = "terminal_logfile";
     private Button bSend;
     private TextView tvConsole;
     private EditText etInput;
@@ -57,7 +58,7 @@ public class TerminalActivity extends AppCompatActivity {
                 /* wyświetl odpowiedź */
                 Toast.makeText(getApplicationContext(), "RESP: "+response, Toast.LENGTH_LONG).show();
             } catch (IOException e) {
-                e.printStackTrace();
+                Utils.saveLogInFile(LogfileName, e, getApplicationContext());
             }
             return response;
         }

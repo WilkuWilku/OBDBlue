@@ -1,6 +1,5 @@
 package inf.obdblue.activities;
 
-import android.content.Context;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,11 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Set;
 
@@ -21,10 +16,11 @@ import inf.obdblue.ParamsListAdapter;
 import inf.obdblue.ParamsListItem;
 import inf.obdblue.R;
 import inf.obdblue.ReponseParser;
+import inf.obdblue.Utils;
 import inf.obdblue.commands.BasicCommands;
 
 public class DashboardActivity extends AppCompatActivity {
-    public static final String logFileName = "dashboard_logfile";
+    public static final String logfileName = "dashboard_logfile";
     private ArrayList<ParamsListItem> paramsListItems;
     private ParamsListAdapter paramsListAdapter;
     private ArrayList<BasicCommands> commandsToExecute;
@@ -89,39 +85,16 @@ public class DashboardActivity extends AppCompatActivity {
                         bluetoothConnection.sendMsg(command.getCommand());
                         /* odczytaj odpowiedź */
                         response = bluetoothConnection.readMsg();
-                        /* parsuj odpowiedź na wartości A, B, C, D */
+                        /* parsuj odpowiedź na bajty A, B, C, D */
                         int[] dataBytes = ReponseParser.parseToUnsignedBytesArray(response);
                         /* przekonwertuj na ostateczny wynik */
                         double value = command.convertResponse(dataBytes[0], dataBytes[1], dataBytes[2], dataBytes[3]);
                         /* dodaj do mapy wyników */
                         valuesMap.put(command, value + " " + command.getUnits());
                         publishProgress(valuesMap);
-                    } catch (IOException e) {
+                    } catch (Exception e){
                         /* zapisz błąd w pliku */
-                        try {
-                            OutputStream os = openFileOutput(logFileName, Context.MODE_PRIVATE);
-                            os.write(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(Calendar.getInstance().getTime()).getBytes());
-                            os.write(("\nDASHBOARD: "+e.getMessage()+"\n").getBytes());
-                            for(StackTraceElement stackTraceElement : e.getStackTrace()) {
-                                os.write((stackTraceElement.toString()+"\n").getBytes());
-                            }
-                            os.close();
-                        } catch (IOException e1) {
-                            e1.printStackTrace();
-                        }
-                        e.printStackTrace();
-                    }catch (Exception e){
-                        try{
-                        OutputStream os = openFileOutput(logFileName, Context.MODE_PRIVATE);
-                        os.write(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(Calendar.getInstance().getTime()).getBytes());
-                        os.write(("\nPARSER: "+e.getMessage()+"\n").getBytes());
-                        for(StackTraceElement stackTraceElement : e.getStackTrace()) {
-                            os.write((stackTraceElement.toString()+"\n").getBytes());
-                        }
-                        os.close();
-                    } catch (IOException e1) {
-                        e1.printStackTrace();
-                    }
+                       Utils.saveLogInFile(logfileName, e, getApplicationContext());
                     }
                 }
             //}

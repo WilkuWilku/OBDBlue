@@ -31,7 +31,7 @@ public class DTCActivity extends AppCompatActivity {
             public void onClick(View v) {
                 try {
                     btConnection.sendMsg("04");
-                    tvRepair.setText("Samochód śmiga jak należy");
+                    tvRepair.setText("Wysłano");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

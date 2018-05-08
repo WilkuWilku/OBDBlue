@@ -7,6 +7,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
+import java.io.IOException;
+
+import inf.obdblue.BluetoothConnection;
 import inf.obdblue.R;
 import inf.obdblue.StatusFragment;
 
@@ -84,5 +87,13 @@ public class MenuActivity extends AppCompatActivity {
         statusFragment.updateStatusText();
     }
 
-
+    @Override
+    protected void onDestroy() {
+        try {
+            BluetoothConnection.getInstance().closeAll();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        super.onDestroy();
+    }
 }
