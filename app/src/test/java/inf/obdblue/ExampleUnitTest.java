@@ -17,6 +17,8 @@ public class ExampleUnitTest {
 
     @Test
     public void stringToByteConversion() throws Exception{
-        assertArrayEquals(new int[]{36, 59, 28, 250}, ReponseParser.parseToUnsignedBytesArray("41 01 24 3B 1C FA"));
+        assertArrayEquals(new int[]{36, 59, 28, 250}, ReponseParser.parseToUnsignedBytesArray("41 01 24 3B 1C FA >", 4));
     }
+
+
 }

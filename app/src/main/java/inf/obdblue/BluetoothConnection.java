@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +29,7 @@ import java.util.UUID;
 
 public class BluetoothConnection {
     private static final int BT_REQUEST_CODE = 1;
+    private final int BUFFER_SIZE = 128;
     private BluetoothAdapter BTAdapter;
     private BluetoothDevice BTDevice;
     private BluetoothSocket BTSocket;
@@ -51,12 +53,12 @@ public class BluetoothConnection {
         outputStream.flush();
     }
 
-    public String readMsg() throws IOException {
-        final int BUFFER_SIZE = 1024;
+    public String readMsg(int nDataBytes) throws IOException {
+        // TODO wczytywanie całej odpowiedzi
         byte[] bytes = new byte[BUFFER_SIZE];
         inputStream = BTSocket.getInputStream();
-        inputStream.read(bytes);
-        String msg = new String(bytes, "US-ASCII");
+        int nRead = inputStream.read(bytes);
+        String msg = new String(bytes, 0, nRead, "US-ASCII");
         return msg;
     }
 
@@ -88,32 +90,32 @@ public class BluetoothConnection {
         return broadcastReceiver;
     }
 
-    public ArrayList<BluetoothDevice> findBT(Activity activity, StatusFragment statusFragment){
-        setBTAdapter(BluetoothAdapter.getDefaultAdapter());
-        /* sprawdź, czy urządzenie obsługuje Bluetooth */
-        if(getBTAdapter() == null) {
-            Toast.makeText(activity.getApplicationContext(), R.string.bluetooth_no_adapter_toast, Toast.LENGTH_SHORT).show();
-        }
-        /* włącz Bluetooth, jeśli jest wyłączone */
-        if(!getBTAdapter().isEnabled()){
-            Intent enableBT = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            activity.startActivityForResult(enableBT, BT_REQUEST_CODE);
-            return null;
-        }
-        /* wyszukaj sparowane urządzenia */
-        statusFragment.setStatusText(R.string.bluetooth_searching_bonded_devices);
-        Set<BluetoothDevice> bondedDevices = getBTAdapter().getBondedDevices();
-        ArrayList<BluetoothDevice> deviceList = new ArrayList<>();
-        deviceList.addAll(bondedDevices);
-        if(bondedDevices.size() > 0) {
-            statusFragment.setStatusText(R.string.bluetooth_bonded_device_found);
-        }
-        else {
-            statusFragment.setStatusText(R.string.bluetooth_no_connection);
-            Toast.makeText(activity.getApplicationContext(), R.string.bluetooth_no_bonded_devices_found, Toast.LENGTH_SHORT).show();
-        }
-        return deviceList;
-    }
+//    public ArrayList<BluetoothDevice> findBT(Activity activity, StatusFragment statusFragment){
+//        setBTAdapter(BluetoothAdapter.getDefaultAdapter());
+//        /* sprawdź, czy urządzenie obsługuje Bluetooth */
+//        if(getBTAdapter() == null) {
+//            Toast.makeText(activity.getApplicationContext(), R.string.bluetooth_no_adapter_toast, Toast.LENGTH_SHORT).show();
+//        }
+//        /* włącz Bluetooth, jeśli jest wyłączone */
+//        if(!getBTAdapter().isEnabled()){
+//            Intent enableBT = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+//            activity.startActivityForResult(enableBT, BT_REQUEST_CODE);
+//            return null;
+//        }
+//        /* wyszukaj sparowane urządzenia */
+//        statusFragment.setStatusText(R.string.bluetooth_searching_bonded_devices);
+//        Set<BluetoothDevice> bondedDevices = getBTAdapter().getBondedDevices();
+//        ArrayList<BluetoothDevice> deviceList = new ArrayList<>();
+//        deviceList.addAll(bondedDevices);
+//        if(bondedDevices.size() > 0) {
+//            statusFragment.setStatusText(R.string.bluetooth_bonded_device_found);
+//        }
+//        else {
+//            statusFragment.setStatusText(R.string.bluetooth_no_connection);
+//            Toast.makeText(activity.getApplicationContext(), R.string.bluetooth_no_bonded_devices_found, Toast.LENGTH_SHORT).show();
+//        }
+//        return deviceList;
+//    }
 
 
     public ArrayList<BluetoothDevice> searchBTDevices(Activity activity, ListView deviceListView, StatusFragment statusFragment){
@@ -160,7 +162,6 @@ public class BluetoothConnection {
         return broadcastReceiver;
     }
 
-
     public void closeAll() throws IOException{
         if (outputStream != null)
             outputStream.close();
@@ -169,6 +170,5 @@ public class BluetoothConnection {
         if (BTSocket != null)
             BTSocket.close();
     }
-
 
 }

@@ -26,7 +26,7 @@ public class SettingsActivity extends AppCompatActivity {
         tvLogs.setMovementMethod(new ScrollingMovementMethod());
         File dashboardLogfile = new File(getFilesDir(), DashboardActivity.logfileName);
         File btConnLogfile = new File(getFilesDir(), ConnectionActivity.logfileName);
-        File terminalLogfile = new File(getFilesDir(), TerminalActivity.LogfileName);
+        File terminalLogfile = new File(getFilesDir(), TerminalActivity.logfileName);
         /* odczyt błędów zebranych w pliku */
         readLog(dashboardLogfile, "--- DASHBOARD ACTIVITY LOG ---\n");
         readLog(btConnLogfile, "--- CONNECTION ACTIVITY LOG ---\n");

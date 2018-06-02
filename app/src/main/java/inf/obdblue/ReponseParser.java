@@ -10,17 +10,17 @@ import java.math.BigInteger;
 
 public final class ReponseParser {
 
-    public static int[] parseToUnsignedBytesArray(String response) throws Exception {
+    public static int[] parseToUnsignedBytesArray(String response, int nDataBytes) throws Exception {
         /* pierwszy podłańcuch to "SEARCHING...", a dwa kolejne bajty nie należą do wartości */
         final int OFFSET = response.startsWith("SEARCHING") ? 3 : 2;
         /* podział na bajty */
         String[] stringBytes = response.split("\\s+");
         /* odpowiedź "NO DATA" */
-        if (stringBytes[0].toLowerCase() == "no")
+        if (stringBytes[0].toLowerCase().equals("no"))
             return new int[]{-1, 0, 0, 0};
         /* parsowanie na bajty ze znakiem */
-        byte[] signedBytes = new byte[stringBytes.length - OFFSET];
-        for (int i = 0; i < stringBytes.length - OFFSET; i++)
+        byte[] signedBytes = new byte[nDataBytes];
+        for (int i = 0; i < nDataBytes; i++)
             signedBytes[i] = new BigInteger(stringBytes[i + OFFSET], 16).byteValue();
         /* konwersja na 4 bajty bez znaku */
         int[] unsignedBytes = new int[4];
